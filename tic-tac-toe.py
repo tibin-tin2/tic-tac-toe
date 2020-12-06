@@ -116,6 +116,10 @@ def is_win():
     return isPlayerWin
 
 
+def is_game_over():
+    return not board.__contains__("-")
+
+
 # game engine method
 def game():
     display_board()
@@ -125,10 +129,16 @@ def game():
         if is_win():
             print("PLAYER ONE WON THE MATCH")
             break
+        elif is_game_over():
+            print("GAME OVER! TIE! :D :P")
+            break
         player_two_movement()
         display_board()
         if is_win():
             print("PLAYER TWO WON THE MATCH")
+            break
+        elif is_game_over():
+            print("GAME OVER! TIE! :D :P")
             break
 
 
