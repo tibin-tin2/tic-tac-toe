@@ -2,130 +2,138 @@ board = []
 
 
 # creates the board
-def initializeBoard():
+def initialize_board():
+    global board
     board = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
     return board
 
 
 # displays the board
-def dispBoard():
+def display_board():
     print(board[0] + "|" + board[1] + "|" + board[2])
     print(board[3] + "|" + board[4] + "|" + board[5])
     print(board[6] + "|" + board[7] + "|" + board[8])
 
 
-def isInputInRange(input):
-    input = int(input)
-    if (input > 0 and input <= 9):
+def is_input_in_range(index):
+    index = int(index)
+    if 0 < index <= 9:
         return True
     return False
 
 
-def isInputIsAlpha(input):
-    if input.isalpha():
+def is_input_is_alpha(index):
+    if index.isalpha():
         return True
     return False
 
 
-def isInputIsNumeric(input):
-    if input.isnumeric():
+def is_input_is_numeric(index):
+    if index.isnumeric():
         return True
     return False
 
 
-def validateInput(input):
-    if (not isInputIsAlpha(input) and isInputInRange(input) and isInputInRange(input)):
-        input = int(input) - 1
-        if (takenPositions.__contains__(input)):
-            return False
-        takenPositions.append(input)
-        return True
+def validate_input(index):
+    if not is_input_is_alpha(index):
+        if is_input_is_numeric(index) and is_input_in_range(index):
+            index = int(index) - 1
+            if takenPositions.__contains__(index):
+                return False
+            takenPositions.append(index)
+            return True
+        return False
+    return False
 
 
-def playerOneMovement():
-    index = input("PLAYER ONE | Please enter one position from 1 to 9 : ")
-    while (not validateInput(index)):
-        playerOneMovement()
-        break
+def get_input_from_user(input_string):
+    index = input(input_string)
+    return index
+
+
+def player_one_movement():
+    index = get_input_from_user("PLAYER ONE | Please enter one position from 1 to 9 : ")
+    while not validate_input(index):
+        index = get_input_from_user("PLAYER ONE | Please enter one position from 1 to 9 : ")
     board[int(index) - 1] = "X"
-    checkWin("X")
+    check_win("X")
 
 
-def playerTwoMovement():
-    index = input("PLAYER TWO | Please enter one position from 1 to 9 : ")
-    while (not validateInput(index)):
-        playerTwoMovement()
-        break
+def player_two_movement():
+    index = get_input_from_user("PLAYER TWO | Please enter one position from 1 to 9 : ")
+    while not validate_input(index):
+        index = get_input_from_user("PLAYER TWO | Please enter one position from 1 to 9 : ")
     board[int(index) - 1] = "O"
-    checkWin("O")
+    check_win("O")
+    return
 
 
-def setWin():
+def set_win():
     global isPlayerWin
     isPlayerWin = True
 
 
-def checkWin(sign):
-    checkHorizontalWin(sign)
-    checkVerticalWin(sign)
-    checkDiagonalWin(sign)
+def check_win(sign):
+    check_horizontal_win(sign)
+    check_vertical_win(sign)
+    check_diagonal_win(sign)
 
 
-def checkHorizontalWin(sign):
+def check_horizontal_win(sign):
     if ((board[0] == sign and board[1] == sign and board[2] == sign) or (
             board[2] == sign and board[1] == sign and board[0] == sign)):
-        setWin()
+        set_win()
     elif ((board[3] == sign and board[4] == sign and board[5] == sign) or (
             board[5] == sign and board[4] == sign and board[3] == sign)):
-        setWin()
+        set_win()
     elif ((board[6] == sign and board[7] == sign and board[8] == sign) or (
             board[8] == sign and board[7] == sign and board[6] == sign)):
-        setWin()
+        set_win()
 
 
-def checkVerticalWin(sign):
+def check_vertical_win(sign):
     if ((board[0] == sign and board[3] == sign and board[6] == sign or (
             board[6] == sign and board[3] == sign and board[0] == sign))):
-        setWin()
+        set_win()
     elif ((board[1] == sign and board[4] == sign and board[7] == sign) or (
             board[7] == sign and board[4] == sign and board[1] == sign)):
-        setWin()
+        set_win()
     elif (board[2] == sign and board[5] == sign and board[8] == sign) or (
             board[8] == sign and board[5] == sign and board[2] == sign):
-        setWin()
+        set_win()
 
 
-def checkDiagonalWin(sign):
+def check_diagonal_win(sign):
     if ((board[0] == sign and board[4] == sign and board[8] == sign or (
             board[8] == sign and board[4] == sign and board[0] == sign))):
-        setWin()
+        set_win()
     elif ((board[2] == sign and board[4] == sign and board[6] == sign or (
             board[6] == sign and board[4] == sign and board[2] == sign))):
-        setWin()
+        set_win()
 
 
-def isWin():
+def is_win():
     return isPlayerWin
 
 
 # game engine method
 def game():
-    dispBoard()
-    while (True):
-        playerOneMovement()
-        dispBoard()
-        if (isWin()):
+    display_board()
+    while True:
+        player_one_movement()
+        display_board()
+        if is_win():
             print("PLAYER ONE WON THE MATCH")
             break
-        playerTwoMovement()
-        dispBoard()
-        if (isWin()):
+        player_two_movement()
+        display_board()
+        if is_win():
             print("PLAYER TWO WON THE MATCH")
             break
 
 
 # main
-board = initializeBoard()
+board = initialize_board()
 takenPositions = []
 isPlayerWin = False
 game()
